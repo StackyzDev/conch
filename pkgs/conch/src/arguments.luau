@@ -370,7 +370,7 @@ local player_type = register_strange_type {
 
 	convert = function(arg: unknown): Player
 		local ctx = context.get_command_context()
-		if arg == "@s" then
+		if arg == "me" then
 			return ctx and ctx.executor.player
 				or error "not executed by a player"
 		elseif typeof(arg) == "number" then
@@ -404,7 +404,7 @@ local player_type = register_strange_type {
 		end
 	end,
 	exact_match = function(arg: unknown): boolean
-		if arg == "@s" then
+		if arg == "me" then
 			return true
 		elseif typeof(arg) == "number" then
 			return Players:GetPlayerByUserId(arg) ~= nil
@@ -427,8 +427,8 @@ local player_type = register_strange_type {
 				description = "Refers to yourself",
 				type = "player"
 			},
-			text = "@s",
-			display = "@s (self)",
+			text = "me",
+			display = "me (self)",
 		})
 
 		for _, player in Players:GetPlayers() do
@@ -449,7 +449,7 @@ local userid_type = register_strange_type {
 	id = "__userid_base",
 	convert = function(arg: unknown)
 		local ctx = context.get_command_context()
-		if arg == "@s" then
+		if arg == "me" then
 			return ctx and ctx.executor.player and ctx.executor.player.UserId
 				or error "not executed by a player"
 		elseif typeof(arg) == "number" then
@@ -473,7 +473,7 @@ local userid_type = register_strange_type {
 			or typeof(n) == "string"
 	end,
 	exact_match = function(arg: unknown): boolean
-		if arg == "@s" then
+		if arg == "me" then
 			return true
 		elseif typeof(arg) == "number" then
 			return true
@@ -496,8 +496,8 @@ local userid_type = register_strange_type {
 				description = "Refers to yourself",
 				type = "player"
 			},
-			text = "@s",
-			display = "@s (self)",
+			text = "me",
+			display = "me (self)",
 		})
 
 		for _, player in Players:GetPlayers() do
@@ -745,9 +745,9 @@ local vectors_type = pluralize(vector_type)
 
 local players_type = pluralize(player_type, {
 	convert = function(v: unknown)
-		if v == "@a" then
+		if v == "all" then
 			return Players:GetPlayers()
-		elseif v == "@o" then
+		elseif v == "other" then
 			local ctx = context.get_command_context()
 			if not ctx or not ctx.executor.player then return Players:GetPlayers() end
 
@@ -768,8 +768,8 @@ local players_type = pluralize(player_type, {
 					description = "Refers to all players in the server",
 					type = "players"
 				},
-				text = "@a",
-				display = "@a (all)",
+				text = "all",
+				display = "all (all)",
 			},
 			{
 				kind = nil,
@@ -778,19 +778,19 @@ local players_type = pluralize(player_type, {
 					description = "Refers to all players except you in the server",
 					type = "players"
 				},
-				text = "@o",
-				display = "@o (others)",
+				text = "other",
+				display = "other (others)",
 			},
 		}
 	end,
 
 	match = function(v: unknown) return typeof(v) == "string" end,
-	exact_match = function(v: unknown) return v == "@a" or v == "@o" end,
+	exact_match = function(v: unknown) return v == "all" or v == "other" end,
 })
 
 local userids_type = pluralize(userid_type, {
 	convert = function(v: unknown)
-		if v == "@a" then
+		if v == "all" then
 			local players = Players:GetPlayers()
 			local users = {}
 
@@ -813,14 +813,14 @@ local userids_type = pluralize(userid_type, {
 					description = "Refers to all players in the server",
 					type = "players"
 				},
-				text = "@a",
-				display = "@a (all)",
+				text = "all",
+				display = "all (all)",
 			},
 		}
 	end,
 
 	match = function(v: unknown) return typeof(v) == "string" end,
-	exact_match = function(v: unknown) return v == "@a" end,
+	exact_match = function(v: unknown) return v == "all" end,
 })
 
 local colors_type = pluralize(color_type)

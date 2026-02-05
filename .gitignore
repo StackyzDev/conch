@@ -8,6 +8,7 @@
 **/network/client.luau
 **/dist
 **/default.project.json
+**/package-lock.json
 pkgs/_foreign_*
 !pkgs/conch_standalone/default.project.json
 
